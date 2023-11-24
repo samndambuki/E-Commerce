@@ -1,11 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
+  //whenever we have added an item to cart we need to emit that
+  public cartAddedSubject = new Subject<boolean>();
+
   //create instance of http client
   constructor(private http: HttpClient) {}
 
@@ -23,6 +26,13 @@ export class ProductService {
     return this.http.post<any>(
       'http://onlinetestapi.gerasim.in/api/Ecomm/AddToCart',
       obj
+    );
+  }
+
+  getCartItemsByCustId(custId: number): Observable<any[]> {
+    return this.http.get<any[]>(
+      'http://onlinetestapi.gerasim.in/api/Ecomm/GetCartProductsByCustomerId?id=' +
+        custId
     );
   }
 }
